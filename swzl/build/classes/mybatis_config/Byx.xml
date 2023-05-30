@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.ByxDao">
+    <select id="findList" parameterType="byx" resultType="byx" >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+           a.name as "name",
+           a.content as "content"       
+        from byx a
+        where 1 = 1
+     
+        <if test="title!=null and ''!=title">
+            and (a.title like '%' #{title} '%' )
+        </if>
+       
+        order by a.time desc
+        <if test="page!=null and rows!=null">
+            limit #{page},#{rows}
+        </if>
+        
+    </select>
+    
+    
+    <select id="findOne"  parameterType="byx" resultType="byx"  >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+            a.name as "name",
+           a.content as "content"       
+        from byx a
+        where a.id = #{id}
+    </select>
+    
+    
+    
+      <select id="count" parameterType="byx" resultType="int" >
+        select 
+           count(*)
+        from byx a
+        where 1 = 1
+     
+        <if test="title!=null and ''!=title">
+            and (a.title like '%' #{title} '%' )
+        </if>
+    </select>
+    
+    <insert id="add" parameterType="byx" >
+        insert into byx(title,content,time,name) values (#{title},#{content},#{time},#{name})
+    </insert>
+    
+    <update id="update" parameterType="byx">
+		update byx set
+    	<trim suffixOverrides=",">
+			<if test="title!=null">title=#{title},</if>
+			<if test="time!=null">time=#{time},</if>
+			<if test="content!=null">content=#{content},</if>
+			<if test="name!=null">name=#{name},</if>
+		</trim>
+		<where>id=#{id}</where>        
+    </update>
+    
+    
+    
+    <delete id="delete" parameterType="byx">
+        delete from byx where id = #{id} 
+    </delete>
+    
+    
+    
+</mapper>

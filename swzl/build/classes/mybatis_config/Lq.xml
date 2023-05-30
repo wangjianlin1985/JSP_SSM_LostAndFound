@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.LqDao">
+    <select id="findList" parameterType="lq" resultType="lq" >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.name as "name",
+           a.phone as "phone",
+           a.userId as "user.userId",
+           b.realName as "user.realName",
+           a.swzlid as "swzl.id"
+        from lq a left join user b on a.userid = b.userid 
+        where 1 = 1
+        <if test="name!=null and ''!=name">
+            and (a.name like '%' #{name} '%' or a.phone like '%' #{name} '%' )
+        </if>
+        order by a.time desc
+        <if test="page!=null and rows!=null">
+            limit #{page},#{rows}
+        </if>
+        
+    </select>
+    
+    
+    <select id="findOne"  parameterType="lq" resultType="lq"  >
+          select 
+           a.id as "id",
+           a.time as "time",
+           a.name as "name",
+           a.phone as "phone",
+           a.userId as "user.userId",
+           b.realName as "user.realName"
+        from lq a left join user b on a.userid = b.userid 
+        where a.id = #{id}
+    </select>
+    
+     <select id="findBySwzl"  parameterType="lq" resultType="lq"  >
+          select 
+           a.id as "id",
+           a.time as "time",
+           a.name as "name",
+           a.phone as "phone",
+           a.userId as "user.userId",
+           b.realName as "user.realName"
+        from lq a left join user b on a.userid = b.userid 
+        where a.swzlid = #{swzl.id}
+    </select>
+    
+      <select id="count" parameterType="lq" resultType="int" >
+        select 
+           count(*)
+        from lq a left join user b on a.userid = b.userid 
+        <if test="name!=null and ''!=name">
+            and (a.name like '%' #{name} '%' or a.phone like '%' #{name} '%' )
+        </if>
+    </select>
+    
+    <insert id="add" parameterType="lq" >
+        insert into lq(name,phone,time,swzlid,userId) values (#{name},#{phone},#{time},#{swzl.id},#{user.userId})
+    </insert>
+    
+    <update id="update" parameterType="lq">
+		update lq set
+    	<trim suffixOverrides=",">
+			<if test="name!=null">name=#{name},</if>
+			<if test="time!=null">time=#{time},</if>
+			<if test="phone!=null">phone=#{phone},</if>
+		</trim>
+		<where>id=#{id}</where>        
+    </update>
+    
+    
+    <delete id="datelex" parameterType="lq">
+        delete from lq where id = #{id} 
+    </delete>
+    
+    
+    
+</mapper>

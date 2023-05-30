@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.UserDao">
+	
+	<select id="findUser" parameterType="user" resultType="user">
+		select 
+			u.userId,
+			u.realName,
+			u.userName,
+			u.password,
+			u.userType,
+			u.roleId,
+			r.roleName,
+			u.userDescription,
+			u.deptId,
+			d.name as "deptName",
+			u.deptId as "dept.id",
+			d.name as "dept.name"
+		from user u left join role r on u.roleId = r.roleId 
+			left join dept d on u.deptId = d.id
+		where 1 = 1
+		<if test="userName != null and '' != userName">  
+            <![CDATA[  
+              AND (userName like '%' #{userName} '%'   or  realName like '%' #{userName} '%')  
+            ]]>  
+        </if>
+        <if test="dept != null and dept.id != null">
+        	and u.deptid = #{dept.id}
+        </if>
+        <if test="roleId!=null and roleId!=-1">  
+            <![CDATA[  
+              AND u.roleId = #{roleId}   
+            ]]>  
+        </if>
+		<if test="page != null and rows != null" >           
+              limit #{page}, #{rows} 
+        </if>
+	</select>
+
+
+	<select id="countUser" parameterType="user" resultType="int">
+		select count(*) from user u left join role r on u.roleId = r.roleId 
+			left join dept d on u.deptId = d.id where 1 = 1
+		<if test="userName != null and '' != userName">  
+            <![CDATA[  
+               AND (userName like '%' #{userName} '%'   or  realName like '%' #{userName} '%')  
+            ]]>  
+        </if>
+        <if test="dept != null and dept.id != null">
+        	and u.deptid = #{dept.id}
+        </if>
+         <if test="roleId!=null and roleId!=-1">  
+            <![CDATA[  
+              AND u.roleId = #{roleId}   
+            ]]>  
+        </if>
+	</select>
+	
+	<select id="findOneUser" parameterType="Integer" resultType="user">
+			select 
+			u.userId,
+			u.realName,
+			u.userName,
+			u.password,
+			u.userType,
+			u.roleId,
+			r.roleName,
+			u.userDescription,
+			u.deptId,
+			d.name as "deptName",
+			u.deptId as "dept.id",
+			d.name as "dept.name"
+		from user u left join role r on u.roleId = r.roleId 
+			left join dept d on u.deptId = d.id
+		<where>u.userId=#{userId}</where>
+	</select>
+	
+	<insert id="addUser" parameterType="user" >
+		insert user(userName,password,userType,roleId,userDescription,realName,deptId) 
+		values (#{userName},#{password},2,#{roleId},#{userDescription},#{realName},#{dept.id})
+	</insert>
+	
+	<update id="updateUser" parameterType="user">
+    	update user set
+    	<trim suffixOverrides=",">
+			<if test="userName!=null">userName=#{userName},</if>
+			<if test="realName!=null">realName=#{realName},</if>
+			<if test="password!=null">password=#{password},</if>
+			<if test="userType!=null">userType=#{userType},</if>
+			<if test="roleId!=null">roleId=#{roleId},</if>
+			<if test="dept!=null and dept.id != null">deptId=#{dept.id},</if>
+			<if test="userDescription!=null">userDescription=#{userDescription},</if>
+		</trim>
+		<where>userId=#{userId}</where>
+    </update>
+	
+	
+	<delete id="deleteUser" parameterType="Integer">
+		delete from user 
+		<where>userId=#{userId}</where>
+	</delete>
+	
+	<select id="loginUser" parameterType="Map" resultType="user">
+		select 
+			u.userId,
+			u.realName,
+			u.userName,
+			u.password,
+			u.userType,
+			u.roleId,
+			r.roleName,
+			u.userDescription,
+			u.deptId,
+			d.name as "deptName",
+			u.deptId as "dept.id",
+			d.name as "dept.name"
+		from user u left join role r on u.roleId = r.roleId 
+			left join dept d on u.deptId = d.id
+		where u.userName=#{userName} and u.password=#{password}
+	</select>
+	
+	
+	<select id="existUserWithUserName" parameterType="String" resultType="user">
+		select realName,userId,userName,password,userType,roleId,userDescription from user
+		where userName=#{userName}
+	</select>
+	
+	
+	<select id="existUserWithRoleId" parameterType="Integer" resultType="user">
+		select realName,userId,userName,password,userType,roleId,userDescription from user
+		where roleId=#{roleId} limit 0,1
+	</select>
+	
+	<select id="findOneDeptLeaderByStudentid"  parameterType="Integer" resultType="user">
+		SELECT e.userId
+FROM USER a LEFT JOIN dept b
+ON a.deptId = b.id
+LEFT JOIN classteacher c ON b.id = c.deptId
+LEFT JOIN USER e ON c.teacherId = e.userId
+WHERE c.islead = 1 AND a.userId = #{id}
+	</select>
+	
+</mapper>

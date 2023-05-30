@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.DeptDao">
+	<select id="findAllDept" resultType="dept">
+		select id,pid,name from dept
+	</select>
+	
+	<select id="findDeptByPid" parameterType="dept" resultType="dept">
+		select id,pid,name from dept where pid = #{pid}
+		<if test="page!=null and rows != null">
+			limit #{page},#{rows}
+		</if>
+	</select>
+	
+	<select id="findOneDeptById" parameterType="int" resultType="dept">
+		select id,pid,name from dept where id = #{id}
+	</select>
+	
+	<select id="countDeptByPid" parameterType="int" resultType="int">
+		select count(*) from dept where pid = #{pid}
+	</select>
+	
+	<insert id="addDept" parameterType="dept">
+		insert into dept(pid,name) values (#{pid},#{name})
+	</insert>
+	
+	<update id="updateDept" parameterType="dept">
+		update dept set name = #{name} ,pid=#{pid} where id = #{id}
+	</update>
+	
+	<delete id="deleteDept" parameterType="dept">
+		delete from dept where id = #{id}
+	</delete>
+	
+</mapper>

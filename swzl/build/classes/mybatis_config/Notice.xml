@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.NoticeDao">
+    <select id="findList" parameterType="notice" resultType="notice" >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+           a.content as "content"       
+        from notice a
+        where 1 = 1
+     
+        <if test="title!=null and ''!=title">
+            and (a.title like '%' #{title} '%' )
+        </if>
+       
+        order by a.time desc
+        <if test="page!=null and rows!=null">
+            limit #{page},#{rows}
+        </if>
+        
+    </select>
+    
+    
+    <select id="findOne"  parameterType="notice" resultType="notice"  >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+           a.content as "content"       
+        from notice a
+        where a.id = #{id}
+    </select>
+    
+    
+    
+      <select id="count" parameterType="notice" resultType="int" >
+        select 
+           count(*)
+        from notice a
+        where 1 = 1
+     
+        <if test="title!=null and ''!=title">
+            and (a.title like '%' #{title} '%' )
+        </if>
+    </select>
+    
+    <insert id="add" parameterType="notice" >
+        insert into notice(title,content,time) values (#{title},#{content},#{time})
+    </insert>
+    
+    <update id="update" parameterType="notice">
+		update notice set
+    	<trim suffixOverrides=",">
+			<if test="title!=null">title=#{title},</if>
+			<if test="time!=null">time=#{time},</if>
+			<if test="content!=null">content=#{content},</if>
+		</trim>
+		<where>id=#{id}</where>        
+    </update>
+    
+    
+    
+    <delete id="detele" parameterType="notice">
+        delete from notice where id = #{id} 
+    </delete>
+    
+    
+    
+</mapper>

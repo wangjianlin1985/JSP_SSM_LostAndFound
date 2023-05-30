@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.as.dao.XwqsDao">
+    <select id="findList" parameterType="xwqs" resultType="xwqs" >
+        select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+           a.content as "content",
+           a.status as "status",
+           a.code as "code",
+           a.userId as "user.userId",
+           b.realName as "user.realName"
+        from xwqs a left join user b on a.userid = b.userid 
+        where 1 = 1
+        <if test="status!=null and ''!=status">
+            and a.status = #{status}
+        </if>
+        <if test="title!=null and ''!=title">
+            and (a.title like '%' #{title} '%' or a.code like '%' #{code} '%' )
+        </if>
+        <if test="user!=null and user.userId!=null">
+            and a.userid = #{user.userId}
+        </if>
+        order by a.time desc
+        <if test="page!=null and rows!=null">
+            limit #{page},#{rows}
+        </if>
+        
+    </select>
+    
+    
+    <select id="findOne"  parameterType="xwqs" resultType="xwqs"  >
+         select 
+           a.id as "id",
+           a.time as "time",
+           a.title as "title",
+           a.content as "content",
+           a.status as "status",
+           a.userId as "user.userId",
+           a.code as "code",
+           b.realName as "user.realName"
+        from xwqs a left join user b on a.userid = b.userid 
+        where a.id = #{id}
+    </select>
+    
+    
+    
+      <select id="count" parameterType="xwqs" resultType="int" >
+        select 
+           count(*)
+        from xwqs a left join user b on a.userid = b.userid 
+        where 1 = 1
+        <if test="status!=null and ''!=status">
+            and a.status = #{status}
+        </if>
+        <if test="title!=null and ''!=title">
+             and (a.title like '%' #{title} '%' or a.code like '%' #{code} '%' )
+        </if>
+        <if test="user!=null and user.userId!=null">
+            and a.userid = #{user.userId}
+        </if>
+    </select>
+    
+    <insert id="add" parameterType="xwqs" >
+        insert into xwqs(title,content,time,status,userId,code) values (#{title},#{content},#{time},#{status},#{user.userId},#{code})
+    </insert>
+    
+    <update id="update" parameterType="xwqs">
+		update xwqs set
+    	<trim suffixOverrides=",">
+			<if test="title!=null">title=#{title},</if>
+			<if test="time!=null">time=#{time},</if>
+			<if test="content!=null">content=#{content},</if>
+		</trim>
+		<where>id=#{id}</where>        
+    </update>
+    
+    
+    <update id="updateStatus" parameterType="xwqs">
+		update xwqs set status = #{status} where id=#{id}         
+    </update>
+    
+    
+    <delete id="datele" parameterType="xwqs">
+        delete from xwqs where id = #{id} 
+    </delete>
+    
+    
+    
+</mapper>

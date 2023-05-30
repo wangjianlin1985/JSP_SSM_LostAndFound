@@ -1,0 +1,22 @@
+@charset "utf-8";
+body, div, address, blockquote, iframe, ul, ol, dl, dt, dd, li, dl, h1, h2, h3, h4, h5, h6, p, pre, table, caption, th, td, form, legend, fieldset, input, button, select, textarea, p {margin:0; padding:0; font-weight: normal;font-style: normal;font-size: 100%; font-family: inherit;}
+body { font-size:12px; font-family:Arial, Helvetica, sans-serif; background: #CCCCCC; color:#555555;}
+
+html { -webkit-text-size-adjust:none; }
+ol, ul ,li{list-style: none;}
+a { text-decoration:none; cursor:pointer;}
+img {border: 0; }
+
+#web { width:970px; height:680px; background:url(../images/bg.png) no-repeat; margin:0px auto;}
+
+
+#web .login { width:670px; height:220px; margin:0px auto; background:#F7F7F9; border:1px solid #ddd;}
+#web .login .banner { width:368px; height:218px; padding:1px; float:left;}
+#web .login .logmain { width:300px; height:220px; float:right;}
+#web .login .logmain h1 { height:30px; display:block; line-height:30px;}
+#web .login .logmain .logdv { height:28px; margin:8px 0px; padding-left:20px; line-height:28px;}
+#web .login .logmain .logdv .logzi { width:50px; height:28px; display:block; float:left;}
+#web .login .logmain .logdv .ipt { width:190px; height:26px; border:1px solid #ddd; padding-left:10px;}
+.more { display:block; float:right; color:#3C8DB5; margin-right:30px; color:#3C8DB5;}
+.cex { float:left; display:block; margin-top:7px; margin-right:5px;}
+.btnbg { width:203px; height:40px; background:url(../images/btnbg.png) no-repeat; text-align:center; line-height:40px; color:#FFFFFF; font-weight:bold; border:0px; cursor:pointer;}
